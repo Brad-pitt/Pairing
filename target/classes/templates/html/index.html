@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script th:src="@{/js/jquery-2.2.3.min.js}"></script>
+<head>
+    <meta http-equiv="Content-Type" content="charset=utf-8"/>
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <title>首页</title>
+</head>
+<body>
+<input type="file" id="file" name="file" placeholder="点我上传文件">
+<button type="button" onclick="submit();">提交</button>
+<div id="content"></div>
+
+<a href="/download/txt" id="download" style="display: none">下载</a>
+
+<div id="container" style="height: 600px; width: 1000px; margin:20px auto 0;"></div>
+</body>
+<div th:text="${name}"></div>
+<script th:inline="javascript">
+
+    var name = [[${name}]];
+
+    console.log(name)
+
+    function submit() {
+        var formData = new FormData();
+        formData.append("file", $('#file')[0].files[0]);
+        $.ajax({
+            url: '/upload/file',
+            type: 'post',
+            processData: false,
+            contentType: false,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                var key = [];
+                var values = [];
+                $.each(data, function (index, value) {
+                    key.push(value.key)
+                    values.push(value.value)
+                })
+                console.log(key)
+                showEchars(key, values);
+                $("#download").css("display", "block");
+            }
+        })
+    }
+
+    function showEchars(key, value) {
+
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        option = {
+            xAxis: {
+                type: 'category',
+                data: key
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: value,
+                type: 'bar'
+            }]
+        };
+        ;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+</script>
+</html>

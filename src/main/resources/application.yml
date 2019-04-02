@@ -1,0 +1,26 @@
+server:
+  port: 9099
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  thymeleaf:
+    cache: false
+    enabled: true
+    prefix: classpath:/templates/html/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    check-template: true # 检查模版是否存在
+  freemarker:
+    cache: false
+    enabled: false
+  devtools:
+    restart:
+      enabled: true # 开启热部署
+      additional-paths: src/main/java/* #设置重启的目录
+      exclude: data/**
+  http:
+    encoding:
+      charset: UTF-8
